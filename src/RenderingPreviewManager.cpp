@@ -23,8 +23,8 @@ void RenderingPreviewManager::UpdatePreview(command_list* cmd_list, uint64_t cal
     }
 
     device* device = cmd_list->get_device();
-    CommandListDataContainer& commandListData = cmd_list->get_private_data<CommandListDataContainer>();
-    DeviceDataContainer& deviceData = device->get_private_data<DeviceDataContainer>();
+    CommandListDataContainer& commandListData = *cmd_list->get_private_data<CommandListDataContainer>();
+    DeviceDataContainer& deviceData = *device->get_private_data<DeviceDataContainer>();
 
     // Remove call location from queue
     commandListData.commandQueue &= ~(invocation << (callLocation * MATCH_DELIMITER));
@@ -33,7 +33,7 @@ void RenderingPreviewManager::UpdatePreview(command_list* cmd_list, uint64_t cal
         return;
     }
 
-    RuntimeDataContainer& runtimeData = deviceData.current_runtime->get_private_data<RuntimeDataContainer>();
+    RuntimeDataContainer& runtimeData = *deviceData.current_runtime->get_private_data<RuntimeDataContainer>();
 
     ToggleGroup& group = uiData.GetToggleGroups().at(uiData.GetToggleGroupIdShaderEditing());
 
@@ -51,7 +51,7 @@ void RenderingPreviewManager::UpdatePreview(command_list* cmd_list, uint64_t cal
 
         if (active_target.resource != 0) {
             resource_desc desc = device->get_resource_desc(active_target.resource);
-            // cmd_list->get_private_data<state_tracking>().start_resource_barrier_tracking(res, resource_usage::render_target);
+            // cmd_list->get_private_data<state_tracking>()->start_resource_barrier_tracking(res, resource_usage::render_target);
 
             deviceData.huntPreview.target = active_target.resource;
             deviceData.huntPreview.target_desc = desc;
@@ -71,7 +71,7 @@ void RenderingPreviewManager::UpdatePreview(command_list* cmd_list, uint64_t cal
 
     if (group.getId() == uiData.GetToggleGroupIdShaderEditing() && !deviceData.huntPreview.matched) {
         resource rs = deviceData.huntPreview.target;
-        // resource_usage rs_usage = cmd_list->get_private_data<state_tracking>().stop_resource_barrier_tracking(rs);
+        // resource_usage rs_usage = cmd_list->get_private_data<state_tracking>()->stop_resource_barrier_tracking(rs);
         // if (rs_usage == resource_usage::undefined)
         //{
         //     return;
