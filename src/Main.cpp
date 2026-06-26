@@ -141,15 +141,15 @@ static void onResetCommandList(command_list* commandList) {
     commandListData.Reset();
 }
 
-static bool onCreateSwapchain(swapchain_desc& desc, void* hwnd) {
+static bool onCreateSwapchain(device_api api, swapchain_desc& desc, void* hwnd) {
     return resourceManager.OnCreateSwapchain(desc, hwnd);
 }
 
-static void onInitSwapchain(reshade::api::swapchain* swapchain) {
+static void onInitSwapchain(reshade::api::swapchain* swapchain, bool resize) {
     resourceManager.OnInitSwapchain(swapchain);
 }
 
-static void onDestroySwapchain(reshade::api::swapchain* swapchain) {
+static void onDestroySwapchain(reshade::api::swapchain* swapchain, bool resize) {
     resourceManager.OnDestroySwapchain(swapchain);
 }
 
