@@ -7,7 +7,10 @@
 [submodule "deps/reshade"]
 	path = deps/reshade
 	url = https://github.com/crosire/reshade.git
-	branch = addon
+	# Pinned to a specific release tag (currently v6.7.3 / API 18) via the
+	# recorded commit. Intentionally no 'branch =' so that
+	# `git submodule update --remote` cannot silently jump to addon-branch HEAD
+	# (which may carry a newer, breaking ReShade API version).
 [submodule "deps/robin-map"]
 	path = deps/robin-map
 	url = https://github.com/Tessil/robin-map.git

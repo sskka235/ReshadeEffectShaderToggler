@@ -1,0 +1,28 @@
+# clang-tidy configuration for REST.
+# https://clang.llvm.org/extra/clang-tidy/checks/list.html
+#
+# Scope is deliberately conservative: this is a long-lived codebase that does
+# not follow clang-tidy's default naming/style conventions, so we enable the
+# checks that find *real defects* (uninitialized memory, null derefs, narrowing
+# conversions, leaks) and disable broad style/modernize noise. Tidy is for
+# editor-time analysis here — the MSBuild/MSVC build is the source of truth.
+---
+Checks: >
+  -*,
+  bugprone-*,
+  performance-*,
+  portability-*,
+  misc-*,
+  clang-analyzer-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-narrowing-conversions,
+  -misc-non-private-member-variables-in-classes,
+  -misc-unused-parameters,
+  -misc-no-recursion,
+  -misc-use-anonymous-namespace,
+  -performance-avoid-endl
+
+WarningsAsErrors: ""
+# Only analyze our own headers, not the vendored deps under deps/.
+HeaderFilterRegex: "src/.*\\.(h|hpp)$"
+FormatStyle: file

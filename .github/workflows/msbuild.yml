@@ -53,7 +53,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        submodules: 'recursive'
+        submodules: true
+
+    # REST only needs ReShade's headers plus its bundled ImGui, not ReShade's
+    # other nested submodules (d3d12/spirv/vma/vulkan/...). Init just ImGui.
+    - name: Init ReShade ImGui submodule
+      run: git -C deps/reshade submodule update --init deps/imgui
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2

@@ -1,0 +1,31 @@
+# clangd configuration for REST.
+# Mirrors the include paths and preprocessor defines from
+# src/ShaderToggler.vcxproj so editor-time analysis (and .clang-tidy) can
+# resolve ReShade / ImGui / dependency headers. The MSVC MSBuild project
+# remains the actual build system.
+CompileFlags:
+  Add:
+    - -std=c++20
+    - -DWIN32
+    - -DNDEBUG
+    - -DSHADERTOGGLER_EXPORTS
+    - -D_WINDOWS
+    - -D_USRDLL
+    - -DBUILTIN_ADDON
+    - -DNOMINMAX
+    - -DWIN32_LEAN_AND_MEAN
+    - -DIMGUI_DISABLE_INCLUDE_IMCONFIG_H
+    - -DImTextureID=unsigned long long
+    - -I../deps/robin-map/include
+    - -I../deps/reshade/deps/imgui
+    - -I../deps/reshade/include
+    - -I../deps/sigmatch/include/sigmatch
+    - -I../deps/minhook/include
+  # MSVC-specific flags that clang doesn't understand, if a compile_commands.json
+  # ever gets generated from the MSVC build.
+  Remove:
+    - /*
+    - -external:*
+
+Diagnostics:
+  UnusedIncludes: None
